@@ -1,0 +1,22 @@
+Package: stlfed.R
+Title: Dummy Package to Demonstrate Package-Based Development Workflow
+Description:
+    Longer description of package. Can span multiple lines.
+Version: 0.1.0
+Date: 2019-12-05
+Authors@R:
+  c(person("Ryan", "Price", email = "ryapric@gmail.com", role = c("cre", "aut")))
+License: MIT + file LICENSE
+Depends: R (>= 3.4.0)
+Imports:
+  forecast (>= 8.4)
+Suggests:
+  devtools (>= 2.0.0),
+  knitr (>= 1.19),
+  rmarkdown (>= 1.8),
+  testthat (>= 2.0.0)
+URL: https://github.com/ryapric/pbdw
+BugReports: https://github.com/ryapric/pbdw/issues
+RoxygenNote: 6.1.1
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
