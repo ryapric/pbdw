@@ -1,4 +1,4 @@
-Package: stlfed.R
+Package: stlfedR
 Title: Dummy Package to Demonstrate Package-Based Development Workflow
 Description:
     Longer description of package. Can span multiple lines.
@@ -9,7 +9,10 @@ Authors@R:
 License: MIT + file LICENSE
 Depends: R (>= 3.4.0)
 Imports:
-  forecast (>= 8.4)
+  forecast (>= 8.4),
+  glue (>= 1.3.0),
+  httr (>= 1.4.0),
+  lubridate (>= 1.7.4)
 Suggests:
   devtools (>= 2.0.0),
   knitr (>= 1.19),

@@ -4,6 +4,7 @@
 ^\.Rproj\.user$
 ^.*\.log$
 ^.*\.json$
+^.*\.csv$
 ^.*\.txt$
 README.*
 cran-comments.md

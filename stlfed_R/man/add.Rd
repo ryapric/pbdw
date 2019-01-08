@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast.R
 \name{add}
 \alias{add}
-\title{Some Function}
+\title{Forecast}
 \usage{
 add(x, y)
 }

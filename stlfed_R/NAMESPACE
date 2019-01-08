@@ -2,3 +2,7 @@
 
 export(add)
 import(forecast)
+import(glue)
+import(httr)
+importFrom(lubridate,month)
+importFrom(lubridate,year)

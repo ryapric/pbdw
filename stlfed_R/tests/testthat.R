@@ -1,4 +1,4 @@
 library(testthat)
-library(pkgname)
+library(stlfedR)
 
-test_check("pkgname")
+test_check("stlfedR")

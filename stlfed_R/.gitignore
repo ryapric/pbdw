@@ -1,5 +1,6 @@
 *.log
 *.json
+*.csv
 *.txt
 *.swp
 .Rproj.user
