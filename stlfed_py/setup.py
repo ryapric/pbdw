@@ -14,10 +14,7 @@ setuptools.setup(
     packages = setuptools.find_packages(),
     python_requires = '>=3.6.*',
     install_requires = [
-        'numpy>=1.15.4',
-        'pandas>=0.23.4',
-        'requests>=2.20.1',
-        'statsmodels>=0.9.0'
+        'pandas>=0.23.4'
     ],
     classifiers = [
         'Programming Language :: Python :: 3',
@@ -25,7 +22,7 @@ setuptools.setup(
     ],
     entry_points = {
         'console_scripts': [
-            'fredcast=stlfed_py.modulename.modulename_main:main'
+            'pkgname-main-script=pkgname.modulename.modulename_main:main'
         ]
     },
     include_package_data = True
