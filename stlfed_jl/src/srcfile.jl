@@ -8,7 +8,9 @@ Julia. However, refer to the official docs to read about best practices, like
 not documenting kwargs if they're self-explanatory.
 """
 
-using Statistics
+using CSV
+using DataFrames
+using GLM
 
 """
     sharpe(x[, rf])
@@ -33,5 +35,6 @@ sharpe(returns, rf = 0.02)
 ```
 """
 function sharpe(x::Array{Float64}; rf::Float64 = 0.02)::Float64
-    return ((mean(x) - rf) / std(x))
+    # return ((mean(x) - rf) / std(x))
+    println("Stub")
 end
