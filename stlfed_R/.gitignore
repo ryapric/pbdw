@@ -2,7 +2,7 @@
 *.json
 *.csv
 *.txt
-*.swp
+*.db
 .Rproj.user
 __README.*
 README.html

@@ -1,6 +1,7 @@
 library(forecast)
 library(httr)
 library(lubridate)
+library(RSQLite)
 
 url <- 'https://fred.stlouisfed.org/graph/fredgraph.csv'
 fred_id <- 'MONAN' # MO Total Non-Farm Employment
@@ -41,12 +42,21 @@ fcast_dates <- seq(first_fcast_period, last_fcast_period, by = 'month')
 
 df_fcast <- data.frame(
     DATE = fcast_dates,
-    fcast$mean,
+    FRED_ID = fcast$mean,
+    label = 'Forecast',
     MAPE = mape,
     stringsAsFactors = FALSE
 )
-# Can't easily parse names without metaprogramming, fuuuck that
-colnames(df_fcast)[2] <- fred_id
+
+# Can't easily parse names without metaprogramming, fuuuck that (for this example)
+colnames(df_fcast)[which(colnames(df_fcast) == 'FRED_ID')] <- fred_id
+
+# Build final output, and write to DB
+df_out <- data.table::rbindlist(list(df_0, df_fcast), fill = TRUE)
+
+con <- dbConnect(RSQLite::SQLite(), './fcast.db')
+dbWriteTable(con, glue::glue('fcast_{fred_id}'), df_out, overwrite = TRUE)
+dbDisconnect(con)
 
 # Plot, for interactive use
 plot(fcast)
