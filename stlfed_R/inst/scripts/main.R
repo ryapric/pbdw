@@ -42,7 +42,7 @@ fcast_dates <- seq(first_fcast_period, last_fcast_period, by = 'month')
 
 df_fcast <- data.frame(
     DATE = fcast_dates,
-    FRED_ID = fcast$mean,
+    FRED_ID = as.numeric(fcast$mean),
     label = 'Forecast',
     MAPE = mape,
     stringsAsFactors = FALSE
@@ -60,3 +60,9 @@ dbDisconnect(con)
 
 # Plot, for interactive use
 plot(fcast)
+
+
+# NOTE: This is some time saving bullshit to help with report generation later,
+# which you can ignore for now
+saveRDS(fred_id, file.path(here::here(), "./fred_id.rds"))
+saveRDS(fcast, file.path(here::here(), "./fcast.rds"))

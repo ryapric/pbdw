@@ -3,13 +3,15 @@ R = R --vanilla CMD
 
 all: build check install clean
 
-build:
+FORCE:
+
+build: FORCE
 	$(R) build .
 
 check: build
 	$(R) check --no-manual *.tar.gz
 
-test:
+test: FORCE
 	Rscript -e 'devtools::test()'
 
 define devtools_check
@@ -21,12 +23,17 @@ define devtools_check
 			} \
 		)"
 endef
-install:
+install: FORCE
 	@$(devtools_check); \
 	Rscript -e 'devtools::install()'
 
-install_src:
+install_src: FORCE
 	$(R) INSTALL .
+
+report: FORCE
+	@Rscript -e 'rmarkdown::render(file.path(here::here(), "./inst/reports/forecast-report.Rmd"))'
+	@Rscript -e 'file.copy(file.path(here::here(), "./inst/reports/forecast-report.html"), file.path(here::here(), "forecast-report.html"))'
+	@xdg-open forecast-report.html
 
 clean:
 	rm -rf *.tar.gz *.Rcheck ..Rcheck

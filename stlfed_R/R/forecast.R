@@ -1,4 +1,4 @@
-#' Forecast
+#' Add
 #' 
 #' Adds `x` and `y` together.
 #' 

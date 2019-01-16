@@ -3,6 +3,8 @@
 *.csv
 *.txt
 *.db
+*.rds
+*.html
 .Rproj.user
 __README.*
 README.html
