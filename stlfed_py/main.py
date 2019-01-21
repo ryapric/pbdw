@@ -4,6 +4,7 @@ import tempfile #stlib
 import pandas as pd
 import numpy as np
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
+import sqlite3 # stdlib
 import matplotlib.pyplot as plt
 
 # Shitty way around not asking for an API key, since returned data is raw text
@@ -52,6 +53,12 @@ df_fcast = pd.DataFrame(
         'MAPE': mape
     }
 )
+
+# Write to DB
+df_out = df.append(df_fcast, sort = False)
+db = sqlite3.connect('./fcast.db')
+df_out.to_sql(f'fcast_{fred_id}', db, index = False, if_exists = 'replace')
+db.close()
 
 # Plotting, just for interactive use
 plt.plot(df['DATE'], df[fred_id], label = 'Actual')

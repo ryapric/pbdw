@@ -14,8 +14,10 @@ setuptools.setup(
     packages = setuptools.find_packages(),
     python_requires = '>=3.6.*',
     install_requires = [
+        'flask>=1.0.2',
         'pandas>=0.23.4',
-        'statsmodels>=0.9.0'
+        'statsmodels>=0.9.0',
+        'waitress>=1.2.0'
     ],
     classifiers = [
         'Programming Language :: Python :: 3',
