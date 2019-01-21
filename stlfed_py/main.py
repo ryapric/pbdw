@@ -1,11 +1,13 @@
 import requests
-import datetime
+import datetime # stdlib
+import tempfile #stlib
 import pandas as pd
 import numpy as np
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 import matplotlib.pyplot as plt
 
 # Shitty way around not asking for an API key, since returned data is raw text
+# With a key, change this to requests.get()
 url = 'https://fred.stlouisfed.org/graph/fredgraph.csv'
 fred_id = 'MONAN' # MO Total Non-Farm Employment
 today = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -13,10 +15,11 @@ start_date = (pd.to_datetime(today) - pd.DateOffset(years = 5)).strftime('%Y-%m-
 end_date = today
 r = requests.get(f'{url}?id={fred_id}&cosd={start_date}&coed={end_date}')
 
-with open('fred_id.csv', 'w') as f:
+with tempfile.NamedTemporaryFile('w', delete = False) as f:
     f.write(r.text)
+    tmpfile = f.name
 
-df = pd.read_csv('fred_id.csv')
+df = pd.read_csv(tmpfile)
 
 # Prep
 df['DATE'] = pd.to_datetime(df['DATE'])
@@ -34,7 +37,7 @@ model = ExponentialSmoothing(
 ).fit()
 
 # Get MAPE
-pct_error = np.abs(df[fred_id] - model.fcastvalues) / df[fred_id]
+pct_error = np.abs((df[fred_id] - model.fcastvalues) / df[fred_id])
 mape = np.mean(pct_error) * 100
 
 # Forecast

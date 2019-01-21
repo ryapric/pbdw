@@ -14,7 +14,8 @@ setuptools.setup(
     packages = setuptools.find_packages(),
     python_requires = '>=3.6.*',
     install_requires = [
-        'pandas>=0.23.4'
+        'pandas>=0.23.4',
+        'statsmodels>=0.9.0'
     ],
     classifiers = [
         'Programming Language :: Python :: 3',

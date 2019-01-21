@@ -1,8 +1,5 @@
-"""
-Actual test file for a module.
-"""
-import pkgname.modulename.modulename_helpers as mh
+import stlfed_py.modulename.modulename_helpers as mh
 
-def test_modulefunc():
-    res = mh.modulefunc()
+def test_add():
+    res = mh.add()
     assert res == 2
