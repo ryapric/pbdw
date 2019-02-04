@@ -9,6 +9,12 @@ def create_app(test_config = None):
     # Flag for when running tests
     testing = True if (test_config is not None and test_config['TESTING']) else False
 
+    # Index
+    @app.route('/api/health', methods = ['GET'])
+    def index():
+        return 'Get forecasted data by either ...', 200
+    #end index
+
     # Health check
     @app.route('/api/health', methods = ['GET'])
     def app_health():
