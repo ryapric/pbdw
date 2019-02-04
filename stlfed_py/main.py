@@ -47,7 +47,11 @@ fcast = model.forecast(h)
 # Jesus, this is messy
 df_fcast = pd.DataFrame(
     data = {
-        'DATE': pd.date_range(pd.to_datetime(df['DATE'].values[len(df.index)-1]) + pd.DateOffset(months = 1), periods = h, freq = 'MS'),
+        'DATE': pd.date_range(
+            pd.to_datetime(df['DATE'].values[len(df.index)-1]) + pd.DateOffset(months = 1),
+            periods = h,
+            freq = 'MS'
+        ),
         fred_id: fcast,
         'label': 'Forecast',
         'MAPE': mape
