@@ -21,7 +21,7 @@ def get_fred(fred_id, start_date = start_date_default, end_date = end_date_defau
 
     :param end_date: End date for FRED series. Defaults to the date called.
 
-    :rtype: A pandas `DataFrame`
+    :returns: A pandas `DataFrame`
     """
     # Shitty way around not asking for an API key, since returned data is raw
     # text. With a key, change this to GET from the API endpoint

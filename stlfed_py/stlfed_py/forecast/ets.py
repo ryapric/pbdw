@@ -13,7 +13,7 @@ def fit_ets(df, fred_id, seasonal_periods = 12):
     :param seasonal_periods: Number of seasonal periods for data. If monthly,
                              then 12 (the default); if quarterly, then 4; etc.
     
-    :rtype: `statsmodels` ETS model object
+    :returns: `statsmodels` ETS model object
     """
     model = ExponentialSmoothing(
         df[fred_id],
@@ -36,7 +36,7 @@ def get_mape(model, df, fred_id):
 
     :param fred_id: FRED series ID
 
-    :rtype: float
+    :returns: float
     """
     pct_error = np.abs((df[fred_id] - model.fcastvalues) / df[fred_id])
     mape = np.mean(pct_error) * 100
@@ -45,7 +45,16 @@ def get_mape(model, df, fred_id):
 
 def fredcast(df, fred_id, seasonal_periods = 12, h = 12):
     """
-    Construct 
+    Construct time-series forecast on passed `DataFrame`
+
+    :param df: pandas `DataFrame` containing FRED data
+
+    :param fred_id: FRED series ID. Also used to index the correct column in `df`.
+
+    :param seasonal_periods: Number of seasonal periods for data. If monthly,
+                             then 12 (the default); if quarterly, then 4; etc.
+
+    :param h: Number of periods to forecast forward
     """
     model = fit_ets(df, fred_id, seasonal_periods)
     fcast = model.forecast(h)
