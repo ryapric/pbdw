@@ -60,9 +60,3 @@ dbDisconnect(con)
 
 # Plot, for interactive use
 plot(fcast)
-
-
-# NOTE: This is some time saving bullshit to help with report generation later,
-# which you can ignore for now
-saveRDS(fred_id, file.path(here::here(), "./fred_id.rds"))
-saveRDS(fcast, file.path(here::here(), "./fcast.rds"))
