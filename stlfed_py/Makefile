@@ -60,6 +60,8 @@ IMAGE = fredcast
 TAG = latest
 REPO = docker.io/ryapric
 
+# Cumulative deps on each other; Make can't determine if something is out of
+# date, but Docker is smart enough to not redo anything it's already done
 docker-build:
 	@docker build -t $(IMAGE):$(TAG) .
 
@@ -67,8 +69,12 @@ docker-push: docker-build
 	@docker tag $(IMAGE):$(TAG) $(REPO)/$(IMAGE):$(TAG)
 	@docker push $(REPO)/$(IMAGE):$(TAG)
 
-docker-deploy: docker-push
+docker-instance-create: docker-push
 	@gcloud compute instances create-with-container $(IMAGE) \
 	--container-image $(REPO)/$(IMAGE):$(TAG) \
 	--machine-type "f1-micro" \
 	--tags=http-server,https-server
+
+docker-instance-update: docker-push
+	@gcloud compute instances update-container $(IMAGE) \
+	--container-image $(REPO)/$(IMAGE):$(TAG)
