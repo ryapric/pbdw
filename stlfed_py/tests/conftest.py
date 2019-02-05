@@ -1,6 +1,11 @@
 import pytest
 from stlfed_py.flask_app.app import create_app
 import os
+import pandas as pd
+
+@pytest.fixture
+def df():
+    return pd.read_csv('tests/data/example.csv')
 
 @pytest.fixture
 def app():
@@ -20,4 +25,7 @@ def teardown():
     Dummy 'test' fixture for teardown functionality, like removing SQLite DB,
     etc.
     """
-    os.remove('test.db')
+    try:
+        os.remove('./test.db')
+    except:
+        pass

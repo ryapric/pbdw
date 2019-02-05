@@ -1,4 +1,4 @@
-import sqlite3
+from sqlalchemy import create_engine
 
 def db_write(df_out, fred_id, dbpath = './fcast.db', if_exists = 'replace'):
     """
@@ -14,7 +14,7 @@ def db_write(df_out, fred_id, dbpath = './fcast.db', if_exists = 'replace'):
 
     :param if_exists: Passed to `pd.DataFrame.to_sql()`
     """
-    con = sqlite3.connect(dbpath)
+    con = create_engine(f'sqlite:///{dbpath}').connect()
     df_out.to_sql(f'fcast_{fred_id}', con, index = False, if_exists = if_exists)
     con.close()
 # end db_write

@@ -13,4 +13,5 @@ README.*
 *.zip
 *.tar.gz
 *.csv
+!tests/data/*.csv
 *.db
