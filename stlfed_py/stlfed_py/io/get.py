@@ -25,6 +25,11 @@ def get_fred(fred_id, start_date = start_date_default, end_date = end_date_defau
     """
     # Shitty way around not asking for an API key, since returned data is raw
     # text. With a key, change this to GET from the API endpoint
+    try:
+        [datetime.datetime.strptime(d, '%Y-%m-%d') for d in [start_date, end_date]]
+    except ValueError:
+        raise ValueError('Bad date format! Must be YYYY-MM-DD')
+    
     url = 'https://fred.stlouisfed.org/graph/fredgraph.csv'
     r = requests.get(f'{url}?id={fred_id}&cosd={start_date}&coed={end_date}')
 
