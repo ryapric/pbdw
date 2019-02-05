@@ -53,3 +53,22 @@ doc: FORCE
 
 uninstall: FORCE
 	pip3 uninstall -y $(PKGNAME)
+
+
+# Docker deployment
+IMAGE = fredcast
+TAG = latest
+REPO = docker.io/ryapric
+
+docker-build:
+	@docker build -t $(IMAGE):$(TAG) .
+
+docker-push: docker-build
+	@docker tag $(IMAGE):$(TAG) $(REPO)/$(IMAGE):$(TAG)
+	@docker push $(REPO)/$(IMAGE):$(TAG)
+
+docker-deploy: docker-push
+	@gcloud compute instances create-with-container $(IMAGE) \
+	--container-image $(REPO)/$(IMAGE):$(TAG) \
+	--machine-type "f1-micro" \
+	--tags=http-server,https-server
