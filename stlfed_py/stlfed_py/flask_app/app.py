@@ -1,7 +1,10 @@
+#!/usr/bin/env python3
+
 from flask import Flask, request
 from waitress import serve
-import datetime
 import pandas as pd
+import stlfed_py.io.get as get
+import stlfed_py.forecast.ets as fc
 
 def create_app(test_config = None):
     app = Flask(__name__)
@@ -24,25 +27,33 @@ def create_app(test_config = None):
     @app.route('/api/fcast', methods = ['GET'])
     def fcast():
         """
-        Will take either URL params, OR JSON body of the request, but not both.
-        If the former, do not set 'application/json' as Content-Type in header.
+        Note that hitting this endpoint will return a JSON string that IS
+        PROBABLY NOT SORTED (data is serialized to a dict, which are unsorted),
+        so unless you control for it here, the client will need to sort the
+        values themselves.
         """
-        fred_id_default = 'MONAN'
-        today = datetime.datetime.now().strftime('%Y-%m-%d')
-        start_date_default = (pd.to_datetime(today) - pd.DateOffset(years = 5)).strftime('%Y-%m-%d')
-        end_date_default = today
-        
-        json_data = request.get_json()
-        if json_data is None:
-            fred_id = request.args.get('fred_id', default = fred_id_default, type = str)
-            start_date = request.args.get('start_date', default = start_date_default, type = str)
-            end_date = request.args.get('end_date', default = end_date_default, type = str)
-        else:
-            fred_id = json_data['fred_id'] if 'fred_id' in json_data else fred_id_default
-            start_date = json_data['start_date'] if 'start_date' in json_data else start_date_default
-            end_date = json_data['end_date'] if 'end_date' in json_data else end_date_default
+        start_date_default = get.start_date_default
+        end_date_default = get.end_date_default
 
-        return f'{fred_id}, from {start_date} to {end_date}', 200
+        fred_id = request.args.get('fred_id', default = 'MONAN', type = str)
+        start_date = request.args.get('start_date', default = start_date_default, type = str)
+        end_date = request.args.get('end_date', default = end_date_default, type = str)
+
+        try:
+            df = get.get_fred(fred_id, start_date, end_date)
+        except:
+            errmsg = """
+                Please check your fred_id, and/or dates, and try again. fred_id
+                must be a valid FRED series ID, a list of which can be found here:
+                https://fred.stlouisfed.org/tags/series. Hovering over the
+                link will show you the series ID as the last URL component.
+                start_date and end_date must be in the format YYYY-MM-DD. No
+                exceptions. Figure it out.
+            """
+            return errmsg, 400
+        df_fcast = fc.fredcast(df, fred_id)
+
+        return df_fcast.to_json(), 200
     # end api_fcast
 
     return app
