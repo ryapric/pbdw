@@ -69,12 +69,12 @@ docker-push: docker-build
 	@docker tag $(IMAGE):$(TAG) $(REPO)/$(IMAGE):$(TAG)
 	@docker push $(REPO)/$(IMAGE):$(TAG)
 
-docker-instance-create: docker-push
+gcloud-instance-create: docker-push
 	@gcloud compute instances create-with-container $(IMAGE) \
 	--container-image $(REPO)/$(IMAGE):$(TAG) \
 	--machine-type "f1-micro" \
 	--tags=http-server,https-server
 
-docker-instance-update: docker-push
+gcloud-instance-update: docker-push
 	@gcloud compute instances update-container $(IMAGE) \
 	--container-image $(REPO)/$(IMAGE):$(TAG)
