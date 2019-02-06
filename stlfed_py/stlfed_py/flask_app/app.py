@@ -16,9 +16,19 @@ def create_app(test_config = None):
     @app.route('/', methods = ['GET'])
     def index():
         helpstr = """
+        <p>
         Get forecasted data by hitting /api/fcast with a valid query string
-        containing fred_id, start_date, and end_date.
-        The defaults are MONAN, five years ago, and today, respectively.
+        containing `fred_id`, `start_date`, and `end_date`. The API will run
+        with defaults if some or all values are not specified.
+        <br/><br/>
+        Those defaults are:
+        <br/>
+        <ul>
+            <li>`fred_id` = 'MONAN'</li>
+            <li>`start_date` = five years ago</li>
+            <li>`end_date` = today</li>
+        </ul>
+        </p>
         """
         return helpstr, 200
     #end index
@@ -32,10 +42,8 @@ def create_app(test_config = None):
     @app.route('/api/fcast', methods = ['GET'])
     def fcast():
         """
-        Note that hitting this endpoint will return a JSON string that IS
-        PROBABLY NOT SORTED (data is serialized to a dict, which are unsorted),
-        so unless you control for it here, the client will need to sort the
-        values themselves.
+        Hit this endpoint with a query string to receive a JSON response that
+        can then  be parsed into a tabular  containing
         """
         start_date_default = get.start_date_default
         end_date_default = get.end_date_default
@@ -48,12 +56,19 @@ def create_app(test_config = None):
             df = get.get_fred(fred_id, start_date, end_date)
         except:
             errmsg = """
-                Please check your fred_id, and/or dates, and try again. fred_id
-                must be a valid FRED series ID, a list of which can be found here:
-                https://fred.stlouisfed.org/tags/series. Hovering over the
-                link will show you the series ID as the last URL component.
-                start_date and end_date must be in the format YYYY-MM-DD. No
-                exceptions. Figure it out.
+            <p>
+            Please check your `fred_id`, and/or dates, and try again.
+            <br/><br/>
+            <ul>
+                <li>`fred_id` must be a valid FRED series ID, a list of which
+                can be found
+                <a href='https://fred.stlouisfed.org/tags/series'>here</a>.
+                Hovering over the link will show you the series ID as the last
+                URL component.</li>
+                <li>`start_date` and `end_date` must be in this exact format:
+                YYYY-MM-DD</li>
+            </ul>
+            </p>
             """
             return errmsg, 400
         df_fcast = fc.fredcast(df, fred_id)
