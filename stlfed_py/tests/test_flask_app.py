@@ -13,6 +13,7 @@ def test_fcast(client):
     fred_id = 'UNRATE'
     start_date = '2018-01-01'
     r = client.get(f'/api/fcast?fred_id={fred_id}&start_date={start_date}')
+    assert r.is_json
     data = json.loads(r.data.decode('utf-8'))
     assert list(data.keys()) == ['DATE', fred_id, 'label', 'MAPE']
     df = pd.DataFrame(data = data)

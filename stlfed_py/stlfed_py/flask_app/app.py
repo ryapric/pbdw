@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import Flask, request
+from flask import Flask, request, Response
 from waitress import serve
 import pandas as pd
 import stlfed_py.io.get as get
@@ -15,7 +15,12 @@ def create_app(test_config = None):
     # Index
     @app.route('/', methods = ['GET'])
     def index():
-        return 'Get forecasted data by either ...', 200
+        helpstr = """
+        Get forecasted data by hitting /api/fcast with a valid query string
+        containing fred_id, start_date, and end_date.
+        The defaults are MONAN, five years ago, and today, respectively.
+        """
+        return helpstr, 200
     #end index
 
     # Health check
@@ -53,7 +58,15 @@ def create_app(test_config = None):
             return errmsg, 400
         df_fcast = fc.fredcast(df, fred_id)
 
-        return df_fcast.to_json(), 200
+        # Enforce response is *clean* JSON
+        # just df.to_json() still returns text/html, and calling flask.jsonify()
+        # on it adds too many escape characters
+        resp = Response(
+            response = df_fcast.to_json(orient = 'records'),
+            status = 200,
+            mimetype = 'application/json'
+        )
+        return resp
     # end api_fcast
 
     return app
