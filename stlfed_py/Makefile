@@ -56,25 +56,31 @@ uninstall: FORCE
 
 
 # Docker deployment
+PROJECT = fredcast
 IMAGE = fredcast
 TAG = latest
-REPO = docker.io/ryapric
+REPO = gcr.io/$(PROJECT)
 
 # Cumulative deps on each other; Make can't determine if something is out of
 # date, but Docker is smart enough to not redo anything it's already done
 docker-build:
+	@rm -rf venv
 	@docker build -t $(IMAGE):$(TAG) .
 
 docker-push: docker-build
 	@docker tag $(IMAGE):$(TAG) $(REPO)/$(IMAGE):$(TAG)
 	@docker push $(REPO)/$(IMAGE):$(TAG)
 
-gcloud-instance-create: docker-push
+gcloud-builds-submit:
+	@rm -rf venv
+	@gcloud builds submit --tag gcr.io/$(PROJECT)/$(IMAGE) .
+
+gcloud-instance-create: gcloud-builds-submit
 	@gcloud compute instances create-with-container $(IMAGE) \
 	--container-image $(REPO)/$(IMAGE):$(TAG) \
 	--machine-type "f1-micro" \
 	--tags=http-server,https-server
 
-gcloud-instance-update: docker-push
+gcloud-instance-update: gcloud-builds-submit
 	@gcloud compute instances update-container $(IMAGE) \
 	--container-image $(REPO)/$(IMAGE):$(TAG)
