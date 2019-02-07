@@ -15,8 +15,8 @@ def test_fcast(client):
     r = client.get(f'/api/fcast?fred_id={fred_id}&start_date={start_date}')
     assert r.is_json
     data = json.loads(r.data.decode('utf-8'))
-    assert list(data.keys()) == ['DATE', fred_id, 'label', 'MAPE']
+    assert list(data[0].keys()) == ['DATE', fred_id, 'label', 'MAPE']
     df = pd.DataFrame(data = data)
     df = df.sort_values('DATE')
-    assert len(df) == len(data['DATE']) == len(data[fred_id])
+    assert len(df) == len(data)
 # end test_fcast
