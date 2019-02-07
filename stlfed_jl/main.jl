@@ -1,6 +1,6 @@
 using CSV
 using DataFrames
-import Dates
+using Dates
 using GLM
 
 url = "https://fred.stlouisfed.org/graph/fredgraph.csv"
