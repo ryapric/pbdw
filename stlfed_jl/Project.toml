@@ -1,0 +1,14 @@
+name = "stlfed_jl"
+uuid = "7d8494e0-2bc7-11e9-0156-6f0734c8d4d2"
+authors = ["Ryan Price <ryapric@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
