@@ -2,6 +2,7 @@ using CSV
 using DataFrames
 using Dates
 using GLM
+using SQLite
 
 url = "https://fred.stlouisfed.org/graph/fredgraph.csv"
 fred_id = "MONAN" # MO Total Non-Farm Employment
@@ -44,3 +45,41 @@ df_fcast[:label] = "Forecast"
 orderednames = Meta.parse('[' * join([':' * String(names(df)[i]) for i in 1:size(df,2)], ", ") * ']')
 df_fcast = @eval df_fcast[$orderednames]
 append!(df, df_fcast)
+
+show(df)
+
+# Wipe DB, because kill me
+dbpath = "./fcast.db"
+rm(dbpath)
+
+db = SQLite.DB(dbpath)
+
+SQLite.execute!(
+    db,
+    """
+    CREATE TABLE fcast_$fred_id (
+        DATE TEXT,
+        $fred_id REAL,
+        trend INTEGER,
+        month INTEGER,
+        label TEXT
+    );
+    """
+)
+
+for i in 1:size(df, 1)
+    SQLite.execute!(
+        db,
+        """
+        INSERT INTO
+            fcast_$fred_id
+        VALUES (
+            '$(string(df[i, 1]))',
+            $(df[i, 2]),
+            $(df[i, 3]),
+            $(df[i, 4]),
+            '$(df[i, 5])'
+        );
+        """
+   )
+end
