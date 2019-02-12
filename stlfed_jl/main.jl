@@ -46,11 +46,9 @@ orderednames = Meta.parse('[' * join([':' * String(names(df)[i]) for i in 1:size
 df_fcast = @eval df_fcast[$orderednames]
 append!(df, df_fcast)
 
-show(df)
-
 # Wipe DB, because kill me
 dbpath = "./fcast.db"
-rm(dbpath)
+isfile(dbpath) ? rm(dbpath) : 0
 
 db = SQLite.DB(dbpath)
 
