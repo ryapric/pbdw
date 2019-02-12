@@ -87,7 +87,7 @@ def create_app(test_config = None):
     return app
 # end create_app
 
-def main(host = '0.0.0.0', port = 8089):
+def main(host = '0.0.0.0', port = 80):
     app = create_app()
     serve(app, host = host, port = port)
 # end main
