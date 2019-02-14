@@ -2,3 +2,4 @@
 !setup.py
 !stlfed_py/
 !tests/
+!Makefile
